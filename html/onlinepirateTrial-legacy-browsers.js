@@ -117,13 +117,6 @@ function experimentInit() {
   studyTrialClock = new util.Clock();
   r_val = [];
   l_val = [];
-  
-  
-  for (var t = 0, _pj_a = num_trial; (t < _pj_a); t += 1) {
-      var val = util.randint(1, 100);
-      r_val.concat(val);
-      l_val.concat((100 - val));
-  }
   player_score = 0;
   pirate_level = 0;
   level_limit = 460;
