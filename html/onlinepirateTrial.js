@@ -89,9 +89,9 @@ var trial_list_s;
 var trial_list_vi;
 var trial_list_vii;
 var prob_bg;
-var studyTrialClock;
 var r_val;
 var l_val;
+var studyTrialClock;
 var player_score;
 var pirate_level;
 var level_limit;
@@ -107,24 +107,30 @@ var routineTimer;
 function experimentInit() {
   // Initialize components for Routine "Intro"
   IntroClock = new util.Clock();
-  var imagePath, imageVariable, num_trial, one, prob_bg, trial_list_s, trial_list_vi, trial_list_vii, zero;
+  var imagePath, imageVariable, l_val, num_trial, one, prob_bg, r_val, trial_list_s, trial_list_vi, trial_list_vii, val, zero;
   imagePath = "stimuli/";
   imageVariable = null;
-  num_trial = 160;
+  num_trial = 120;
   zero = [0];
   one = [1];
-  trial_list_s = ((zero * 60) + (one * 20));
+  trial_list_s = ((zero * 45) + (one * 15));
   trial_list_vi = ((zero * 16) + (one * 4));
   trial_list_vii = ((zero * 4) + (one * 16));
   util.shuffle(trial_list_s);
   util.shuffle(trial_list_vi);
   util.shuffle(trial_list_vii);
-  prob_bg = [[trial_list_s, trial_list_vi, trial_list_vii, trial_list_vi, trial_list_vii]];
+  prob_bg = (((trial_list_s + trial_list_vi) + trial_list_vii) + trial_list_vi);
+  num_trial = prob_bg.length;
+  r_val = [];
+  l_val = [];
+  for (var t = 0, _pj_a = num_trial; (t < _pj_a); t += 1) {
+      val = util.randint(1, 100);
+      l_val = l_val.concat((100 - val));
+      r_val = r_val.concat(val);
+  }
   
   // Initialize components for Routine "studyTrial"
   studyTrialClock = new util.Clock();
-  r_val = [];
-  l_val = [];
   player_score = 0;
   pirate_level = 0;
   level_limit = 460;
@@ -262,7 +268,7 @@ function trialsLoopBegin(thisScheduler) {
   // set up handler to look after randomisation of conditions etc
   trials = new TrialHandler({
     psychoJS: psychoJS,
-    nReps: 1, method: TrialHandler.Method.RANDOM,
+    nReps: 120, method: TrialHandler.Method.RANDOM,
     extraInfo: expInfo, originPath: undefined,
     trialList: undefined,
     seed: undefined, name: 'trials'

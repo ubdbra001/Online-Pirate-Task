@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2020.1.3),
-    on June 08, 2021, at 12:37
+    on June 08, 2021, at 19:24
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -88,10 +88,11 @@ IntroClock = core.Clock()
 imagePath = "stimuli/" # This establishes where the stimuli are stored
 imageVariable = None # Need this to initialise the feedback image display
 
-num_trial = 160 # Number of trials in the experiment
+num_trial = 120 # Number of trials in the experiment
 zero = [0] #create lists 
 one = [1]
-trial_list_s = zero*60+one*20
+
+trial_list_s = zero*45+one*15 # Blue 75% Green 25%
 trial_list_vi = zero*16+one*4
 trial_list_vii = zero*4+one*16
 
@@ -99,29 +100,26 @@ from numpy import random as rand #randomise lists
 rand.shuffle(trial_list_s)
 rand.shuffle(trial_list_vi)
 rand.shuffle(trial_list_vii)
+
+
 #overall task probability
-prob_bg = [(trial_list_s, trial_list_vi, trial_list_vii, trial_list_vi, trial_list_vii)]
+prob_bg = trial_list_s + trial_list_vi + trial_list_vii + trial_list_vi
 
+num_trial = len(prob_bg)
 
-
-# set up "winning score"
-#r_mult = prob_bg[t]
-#l_mult = 1-prob_bg[t]
-#r_tot = r_val*r_mult
-#l_tot = l_val*l_mult
-
-
-# Initialize components for Routine "studyTrial"
-studyTrialClock = core.Clock()
 r_val = []
 l_val = []
 
 #create reward values
 for t in range(0,num_trial):
-    val = rand.randint(1,101)
+    val = rand.randint(1,100)
     r_val.append(val)
     l_val.append(100-val)
 
+
+
+# Initialize components for Routine "studyTrial"
+studyTrialClock = core.Clock()
 player_score = 0
 pirate_level = 0
 level_limit = 460
@@ -130,7 +128,7 @@ leveled_up = False
 background = visual.ImageStim(
     win=win,
     name='background', 
-    image='stimuli/piratetask.bmp', mask=None,
+    image='stimuli/piratetask.png', mask=None,
     ori=0, pos=(0, 0), size=(2, 2),
     color=[1,1,1], colorSpace='rgb', opacity=1,
     flipHoriz=False, flipVert=False,
@@ -218,7 +216,7 @@ for thisComponent in IntroComponents:
 routineTimer.reset()
 
 # set up handler to look after randomisation of conditions etc
-trials = data.TrialHandler(nReps=1, method='random', 
+trials = data.TrialHandler(nReps=120, method='random', 
     extraInfo=expInfo, originPath=-1,
     trialList=[None],
     seed=None, name='trials')
@@ -355,16 +353,16 @@ for thisTrial in trials:
     # Ensure that the object you are accessing ('key_resp') is the named exactly the same here as in the builder
     if key_resp.keys == 'left': # Start by checking which key was pressed
         if key_resp.corr: # Then see if the response was correct
-            imageVariable = imagePath + "Lgreenwin.bmp" # If yes then display the treasure
+            imageVariable = imagePath + "Lgreenwin.png" # If yes then display the treasure
             player_score += trial_l_val # Add the value displayed to the players score
         else:
-            imageVariable = imagePath + "Lgreenlose.bmp" # Otherwise show the empty chest
+            imageVariable = imagePath + "Lgreenlose.png" # Otherwise show the empty chest
     elif key_resp.keys == 'right': # Same as above but on the other side 
         if key_resp.corr:
-            imageVariable = imagePath + "Rbluewin.bmp" # The predefined image path is added to the file name
+            imageVariable = imagePath + "Rbluewin.png" # The predefined image path is added to the file name
             player_score += trial_r_val # Add the value displayed to the players score
         else:
-            imageVariable = imagePath + "Rbluelose.bmp"
+            imageVariable = imagePath + "Rbluelose.png"
     
     if player_score > level_limit:
         pirate_level += 1
@@ -473,7 +471,7 @@ for thisTrial in trials:
     trials.addData('image.stopped', image.tStopRefresh)
     thisExp.nextEntry()
     
-# completed 1 repeats of 'trials'
+# completed 120 repeats of 'trials'
 
 
 # Flip one final time so any remaining win.callOnFlip() 
