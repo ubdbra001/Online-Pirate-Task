@@ -125,7 +125,7 @@ function experimentInit() {
   background = new visual.ImageStim({
     win : psychoJS.window,
     name : 'background', units : undefined, 
-    image : 'stimuli/piratetask.bmp', mask : undefined,
+    image : 'stimuli/piratetask.png', mask : undefined,
     ori : 0, pos : [0, 0], size : [2, 2],
     color : new util.Color([1, 1, 1]), opacity : 1,
     flipHoriz : false, flipVert : false,
@@ -429,18 +429,18 @@ function studyTrialRoutineEnd(trials) {
     });
     if ((key_resp.keys === "left")) {
         if (key_resp.corr) {
-            imageVariable = (imagePath + "Lgreenwin.bmp");
+            imageVariable = (imagePath + "Lgreenwin.png");
             player_score += trial_l_val;
         } else {
-            imageVariable = (imagePath + "Lgreenlose.bmp");
+            imageVariable = (imagePath + "Lgreenlose.png");
         }
     } else {
         if ((key_resp.keys === "right")) {
             if (key_resp.corr) {
-                imageVariable = (imagePath + "Rbluewin.bmp");
+                imageVariable = (imagePath + "Rbluewin.png");
                 player_score += trial_r_val;
             } else {
-                imageVariable = (imagePath + "Rbluelose.bmp");
+                imageVariable = (imagePath + "Rbluelose.png");
             }
         }
     }
