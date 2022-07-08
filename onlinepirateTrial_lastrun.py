@@ -1,8 +1,8 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-This experiment was created using PsychoPy3 Experiment Builder (v2020.1.3),
-    on June 08, 2021, at 19:24
+This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
+    on July 08, 2022, at 11:05
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -11,21 +11,21 @@ If you publish work using this script the most relevant publication is:
 
 """
 
-from __future__ import absolute_import, division
-
+# --- Import packages ---
 from psychopy import locale_setup
 from psychopy import prefs
-from psychopy import sound, gui, visual, core, data, event, logging, clock
+from psychopy import sound, gui, visual, core, data, event, logging, clock, colors, layout
 from psychopy.constants import (NOT_STARTED, STARTED, PLAYING, PAUSED,
                                 STOPPED, FINISHED, PRESSED, RELEASED, FOREVER)
 
 import numpy as np  # whole numpy lib is available, prepend 'np.'
 from numpy import (sin, cos, tan, log, log10, pi, average,
                    sqrt, std, deg2rad, rad2deg, linspace, asarray)
-from numpy.random import random, randint, normal, shuffle
+from numpy.random import random, randint, normal, shuffle, choice as randchoice
 import os  # handy system and path functions
 import sys  # to get file system encoding
 
+import psychopy.iohub as io
 from psychopy.hardware import keyboard
 
 
@@ -33,11 +33,14 @@ from psychopy.hardware import keyboard
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
-
 # Store info about the experiment session
-psychopyVersion = '2020.1.3'
+psychopyVersion = '2022.2.1'
 expName = 'pirateTrial'  # from the Builder filename that created this script
-expInfo = {'participant': '', 'session': '001'}
+expInfo = {
+    'participant': '',
+    'session': '001',
+}
+# --- Show participant info dialog --
 dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=expName)
 if dlg.OK == False:
     core.quit()  # user pressed cancel
@@ -51,7 +54,7 @@ filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expNa
 # An ExperimentHandler isn't essential but helps with data saving
 thisExp = data.ExperimentHandler(name=expName, version='',
     extraInfo=expInfo, runtimeInfo=None,
-    originPath='C:\\Users\\tobiiuser\\Documents\\GitHub\\Online-Pirate-Task\\onlinepirateTrial_lastrun.py',
+    originPath='C:\\Users\\Simon Brett\\Documents\\GitHub\\Online-Pirate-Task\\onlinepirateTrial_lastrun.py',
     savePickle=True, saveWideText=True,
     dataFileName=filename)
 # save a log file for detail verbose info
@@ -61,29 +64,40 @@ logging.console.setLevel(logging.WARNING)  # this outputs to the screen, not a f
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 frameTolerance = 0.001  # how close to onset before 'same' frame
 
-# Start Code - component code to be run before the window creation
+# Start Code - component code to be run after the window creation
 
-# Setup the Window
+# --- Setup the Window ---
 win = visual.Window(
     size=[1366, 768], fullscr=True, screen=0, 
-    winType='pyglet', allowGUI=False, allowStencil=False,
+    winType='pyglet', allowStencil=False,
     monitor='testMonitor', color=[0,0,0], colorSpace='rgb',
     blendMode='avg', useFBO=True, 
     units='height')
+win.mouseVisible = False
 # store frame rate of monitor if we can measure it
 expInfo['frameRate'] = win.getActualFrameRate()
 if expInfo['frameRate'] != None:
     frameDur = 1.0 / round(expInfo['frameRate'])
 else:
     frameDur = 1.0 / 60.0  # could not measure, so guess
+# --- Setup input devices ---
+ioConfig = {}
+
+# Setup iohub keyboard
+ioConfig['Keyboard'] = dict(use_keymap='psychopy')
+
+ioSession = '1'
+if 'session' in expInfo:
+    ioSession = str(expInfo['session'])
+ioServer = io.launchHubServer(window=win, **ioConfig)
+eyetracker = None
 
 # create a default keyboard (e.g. to check for escape)
-defaultKeyboard = keyboard.Keyboard()
+defaultKeyboard = keyboard.Keyboard(backend='iohub')
 
-# Initialize components for Routine "Intro"
-IntroClock = core.Clock()
+# --- Initialize components for Routine "Intro" ---
+# Run 'Begin Experiment' code from setup_code
 # Code in here is run at the very beginning of the experiment
-# Put stuff here that you need to run once but doesn't change
 
 imagePath = "stimuli/" # This establishes where the stimuli are stored
 imageVariable = None # Need this to initialise the feedback image display
@@ -93,8 +107,8 @@ zero = [0] #create lists
 one = [1]
 
 trial_list_s = zero*45+one*15 # Blue 75% Green 25%
-trial_list_vi = zero*16+one*4
-trial_list_vii = zero*4+one*16
+trial_list_vi = zero*16+one*4 # Blue 80% Green 20%
+trial_list_vii = zero*4+one*16 # Blue 20% Green 80%
 
 from numpy import random as rand #randomise lists
 rand.shuffle(trial_list_s)
@@ -118,8 +132,8 @@ for t in range(0,num_trial):
 
 
 
-# Initialize components for Routine "studyTrial"
-studyTrialClock = core.Clock()
+# --- Initialize components for Routine "studyTrial" ---
+# Run 'Begin Experiment' code from feedback_code
 player_score = 0
 pirate_level = 0
 level_limit = 460
@@ -128,33 +142,32 @@ leveled_up = False
 background = visual.ImageStim(
     win=win,
     name='background', 
-    image='stimuli/piratetask.png', mask=None,
+    image='stimuli/piratetask.png', mask=None, anchor='center',
     ori=0, pos=(0, 0), size=(2, 2),
     color=[1,1,1], colorSpace='rgb', opacity=1,
     flipHoriz=False, flipVert=False,
     texRes=128, interpolate=True, depth=-1.0)
 R_text = visual.TextStim(win=win, name='R_text',
-    text='default text',
+    text='',
     font='Arial',
-    pos=(0.2, 0), height=0.1, wrapWidth=None, ori=0, 
+    pos=(0.43, -0.05), height=0.1, wrapWidth=None, ori=0, 
     color='white', colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-2.0);
 L_text = visual.TextStim(win=win, name='L_text',
-    text='default text',
+    text='',
     font='Arial',
-    pos=(-0.2, 0), height=0.1, wrapWidth=None, ori=0, 
+    pos=(-0.43, -0.05), height=0.1, wrapWidth=None, ori=0, 
     color='white', colorSpace='rgb', opacity=1, 
     languageStyle='LTR',
     depth=-3.0);
 key_resp = keyboard.Keyboard()
 
-# Initialize components for Routine "feedback"
-feedbackClock = core.Clock()
+# --- Initialize components for Routine "feedback" ---
 image = visual.ImageStim(
     win=win,
     name='image', 
-    image='sin', mask=None,
+    image='sin', mask=None, anchor='center',
     ori=0, pos=(0, 0), size=(2, 2),
     color=[1,1,1], colorSpace='rgb', opacity=1,
     flipHoriz=False, flipVert=False,
@@ -162,9 +175,9 @@ image = visual.ImageStim(
 
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
-routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine 
+routineTimer = core.Clock()  # to track time remaining of each (possibly non-slip) routine 
 
-# ------Prepare to start Routine "Intro"-------
+# --- Prepare to start Routine "Intro" ---
 continueRoutine = True
 # update component parameters for each repeat
 # keep track of which components have finished
@@ -179,14 +192,13 @@ for thisComponent in IntroComponents:
 # reset timers
 t = 0
 _timeToFirstFrame = win.getFutureFlipTime(clock="now")
-IntroClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
 frameN = -1
 
-# -------Run Routine "Intro"-------
+# --- Run Routine "Intro" ---
 while continueRoutine:
     # get current time
-    t = IntroClock.getTime()
-    tThisFlip = win.getFutureFlipTime(clock=IntroClock)
+    t = routineTimer.getTime()
+    tThisFlip = win.getFutureFlipTime(clock=routineTimer)
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
     frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
     # update/draw components on each frame
@@ -208,7 +220,7 @@ while continueRoutine:
     if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
         win.flip()
 
-# -------Ending Routine "Intro"-------
+# --- Ending Routine "Intro" ---
 for thisComponent in IntroComponents:
     if hasattr(thisComponent, "setAutoDraw"):
         thisComponent.setAutoDraw(False)
@@ -234,9 +246,10 @@ for thisTrial in trials:
         for paramName in thisTrial:
             exec('{} = thisTrial[paramName]'.format(paramName))
     
-    # ------Prepare to start Routine "studyTrial"-------
+    # --- Prepare to start Routine "studyTrial" ---
     continueRoutine = True
     # update component parameters for each repeat
+    # Run 'Begin Routine' code from feedback_code
     #Assuming you have a r_val and and l_val list:
     
     trial_r_val = r_val[ currentLoop.thisN ]
@@ -260,14 +273,13 @@ for thisTrial in trials:
     # reset timers
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
-    studyTrialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
     frameN = -1
     
-    # -------Run Routine "studyTrial"-------
+    # --- Run Routine "studyTrial" ---
     while continueRoutine:
         # get current time
-        t = studyTrialClock.getTime()
-        tThisFlip = win.getFutureFlipTime(clock=studyTrialClock)
+        t = routineTimer.getTime()
+        tThisFlip = win.getFutureFlipTime(clock=routineTimer)
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
@@ -279,6 +291,8 @@ for thisTrial in trials:
             background.tStart = t  # local t and not account for scr refresh
             background.tStartRefresh = tThisFlipGlobal  # on global time
             win.timeOnFlip(background, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'background.started')
             background.setAutoDraw(True)
         
         # *R_text* updates
@@ -288,6 +302,8 @@ for thisTrial in trials:
             R_text.tStart = t  # local t and not account for scr refresh
             R_text.tStartRefresh = tThisFlipGlobal  # on global time
             win.timeOnFlip(R_text, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'R_text.started')
             R_text.setAutoDraw(True)
         
         # *L_text* updates
@@ -297,6 +313,8 @@ for thisTrial in trials:
             L_text.tStart = t  # local t and not account for scr refresh
             L_text.tStartRefresh = tThisFlipGlobal  # on global time
             win.timeOnFlip(L_text, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'L_text.started')
             L_text.setAutoDraw(True)
         
         # *key_resp* updates
@@ -307,13 +325,15 @@ for thisTrial in trials:
             key_resp.tStart = t  # local t and not account for scr refresh
             key_resp.tStartRefresh = tThisFlipGlobal  # on global time
             win.timeOnFlip(key_resp, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'key_resp.started')
             key_resp.status = STARTED
             # keyboard checking is just starting
             waitOnFlip = True
             win.callOnFlip(key_resp.clock.reset)  # t=0 on next screen flip
             win.callOnFlip(key_resp.clearEvents, eventType='keyboard')  # clear events on next screen flip
         if key_resp.status == STARTED and not waitOnFlip:
-            theseKeys = key_resp.getKeys(keyList=['left', 'right'], waitRelease=False)
+            theseKeys = key_resp.getKeys(keyList=['left','right'], waitRelease=False)
             _key_resp_allKeys.extend(theseKeys)
             if len(_key_resp_allKeys):
                 key_resp.keys = _key_resp_allKeys[-1].name  # just the last key pressed
@@ -343,10 +363,11 @@ for thisTrial in trials:
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
     
-    # -------Ending Routine "studyTrial"-------
+    # --- Ending Routine "studyTrial" ---
     for thisComponent in studyTrialComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
+    # Run 'End Routine' code from feedback_code
     # This code will run at the end of the routine in which it is placed
     # Useful for making adjustments to the following routine based on responses in the current routine
     
@@ -376,12 +397,6 @@ for thisTrial in trials:
     # Again be sure that the object called is named the same thing as the object in the builder
     image.setImage(imageVariable)
     
-    trials.addData('background.started', background.tStartRefresh)
-    trials.addData('background.stopped', background.tStopRefresh)
-    trials.addData('R_text.started', R_text.tStartRefresh)
-    trials.addData('R_text.stopped', R_text.tStopRefresh)
-    trials.addData('L_text.started', L_text.tStartRefresh)
-    trials.addData('L_text.stopped', L_text.tStopRefresh)
     # check responses
     if key_resp.keys in ['', [], None]:  # No response was made
         key_resp.keys = None
@@ -395,14 +410,11 @@ for thisTrial in trials:
     trials.addData('key_resp.corr', key_resp.corr)
     if key_resp.keys != None:  # we had a response
         trials.addData('key_resp.rt', key_resp.rt)
-    trials.addData('key_resp.started', key_resp.tStartRefresh)
-    trials.addData('key_resp.stopped', key_resp.tStopRefresh)
     # the Routine "studyTrial" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     
-    # ------Prepare to start Routine "feedback"-------
+    # --- Prepare to start Routine "feedback" ---
     continueRoutine = True
-    routineTimer.add(5.000000)
     # update component parameters for each repeat
     image.setImage(imageVariable)
     # keep track of which components have finished
@@ -417,14 +429,13 @@ for thisTrial in trials:
     # reset timers
     t = 0
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
-    feedbackClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
     frameN = -1
     
-    # -------Run Routine "feedback"-------
-    while continueRoutine and routineTimer.getTime() > 0:
+    # --- Run Routine "feedback" ---
+    while continueRoutine and routineTimer.getTime() < 5.0:
         # get current time
-        t = feedbackClock.getTime()
-        tThisFlip = win.getFutureFlipTime(clock=feedbackClock)
+        t = routineTimer.getTime()
+        tThisFlip = win.getFutureFlipTime(clock=routineTimer)
         tThisFlipGlobal = win.getFutureFlipTime(clock=None)
         frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
         # update/draw components on each frame
@@ -436,6 +447,8 @@ for thisTrial in trials:
             image.tStart = t  # local t and not account for scr refresh
             image.tStartRefresh = tThisFlipGlobal  # on global time
             win.timeOnFlip(image, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'image.started')
             image.setAutoDraw(True)
         if image.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
@@ -443,7 +456,8 @@ for thisTrial in trials:
                 # keep track of stop time/frame for later
                 image.tStop = t  # not accounting for scr refresh
                 image.frameNStop = frameN  # exact frame index
-                win.timeOnFlip(image, 'tStopRefresh')  # time at next scr refresh
+                # add timestamp to datafile
+                thisExp.timestampOnFlip(win, 'image.stopped')
                 image.setAutoDraw(False)
         
         # check for quit (typically the Esc key)
@@ -463,26 +477,29 @@ for thisTrial in trials:
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
     
-    # -------Ending Routine "feedback"-------
+    # --- Ending Routine "feedback" ---
     for thisComponent in feedbackComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
-    trials.addData('image.started', image.tStartRefresh)
-    trials.addData('image.stopped', image.tStopRefresh)
+    # using non-slip timing so subtract the expected duration of this Routine
+    routineTimer.addTime(-5.000000)
     thisExp.nextEntry()
     
 # completed 120 repeats of 'trials'
 
 
+# --- End experiment ---
 # Flip one final time so any remaining win.callOnFlip() 
 # and win.timeOnFlip() tasks get executed before quitting
 win.flip()
 
 # these shouldn't be strictly necessary (should auto-save)
-thisExp.saveAsWideText(filename+'.csv')
+thisExp.saveAsWideText(filename+'.csv', delim='auto')
 thisExp.saveAsPickle(filename)
 logging.flush()
 # make sure everything is closed down
+if eyetracker:
+    eyetracker.setConnectionState(False)
 thisExp.abort()  # or data files will save again on exit
 win.close()
 core.quit()
