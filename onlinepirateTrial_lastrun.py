@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2022.2.1),
-    on July 08, 2022, at 11:05
+    on July 08, 2022, at 11:43
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -106,18 +106,31 @@ num_trial = 120 # Number of trials in the experiment
 zero = [0] #create lists 
 one = [1]
 
+#lists for blue/green probability
 trial_list_s = zero*45+one*15 # Blue 75% Green 25%
 trial_list_vi = zero*16+one*4 # Blue 80% Green 20%
 trial_list_vii = zero*4+one*16 # Blue 20% Green 80%
+
+#lists for hint probability
+trial_list_w = zero*23+one*7 # Hint correct 75%
+trial_list_x = zero*2+one*8 # Hint correct 20%
+trial_list_y = zero*8+one*2 # Hint correct 80%
+trial_list_z = zero*8+one*42 # Hint correct 15%
 
 from numpy import random as rand #randomise lists
 rand.shuffle(trial_list_s)
 rand.shuffle(trial_list_vi)
 rand.shuffle(trial_list_vii)
-
+rand.shuffle(trial_list_w)
+rand.shuffle(trial_list_x)
+rand.shuffle(trial_list_y)
+rand.shuffle(trial_list_z)
 
 #overall task probability
 prob_bg = trial_list_s + trial_list_vi + trial_list_vii + trial_list_vi
+
+# overall hint probability
+prob_hint = trial_list_w + trial_list_x + trial_list_y + trial_list_x + trial_list_y + trial_list_z
 
 num_trial = len(prob_bg)
 
@@ -130,7 +143,18 @@ for t in range(0,num_trial):
     r_val.append(val)
     l_val.append(100-val)
 
+#create hint probability
+# Generate uniformly distributed random number between 0 and 1
+## hint_prob = rand.uniform(size = 1)
 
+
+# Generate start times for hint and response window
+hint_start = rand.uniform(3, 7)
+resp_start = hint_start + rand.uniform(3, 7)
+
+# Set up selection positions
+left_pos = (-0.52, -0.32)
+right_pos = (0.52, -0.32)
 
 # --- Initialize components for Routine "studyTrial" ---
 # Run 'Begin Experiment' code from feedback_code
@@ -162,6 +186,21 @@ L_text = visual.TextStim(win=win, name='L_text',
     languageStyle='LTR',
     depth=-3.0);
 key_resp = keyboard.Keyboard()
+hint = visual.ImageStim(
+    win=win,
+    name='hint', 
+    image='sin', mask=None, anchor='center',
+    ori=0.0, pos=(0, 0), size=(0.5, 0.5),
+    color=[1,1,1], colorSpace='rgb', opacity=None,
+    flipHoriz=False, flipVert=False,
+    texRes=128.0, interpolate=True, depth=-5.0)
+Fixation = visual.TextStim(win=win, name='Fixation',
+    text='+',
+    font='Open Sans',
+    pos=(0, 0), height=0.05, wrapWidth=None, ori=0.0, 
+    color='Black', colorSpace='rgb', opacity=1.0, 
+    languageStyle='LTR',
+    depth=-6.0);
 
 # --- Initialize components for Routine "feedback" ---
 image = visual.ImageStim(
@@ -256,13 +295,15 @@ for thisTrial in trials:
     trial_l_val = l_val[ currentLoop.thisN ]
     
     # You'll also want to add some code here to tell the program which side is correct based on prob_bg
+    
     R_text.setText(trial_r_val)
     L_text.setText(trial_l_val)
     key_resp.keys = []
     key_resp.rt = []
     _key_resp_allKeys = []
+    hint.setImage(imageVariable)
     # keep track of which components have finished
-    studyTrialComponents = [background, R_text, L_text, key_resp]
+    studyTrialComponents = [background, R_text, L_text, key_resp, hint, Fixation]
     for thisComponent in studyTrialComponents:
         thisComponent.tStart = None
         thisComponent.tStop = None
@@ -345,6 +386,46 @@ for thisTrial in trials:
                     key_resp.corr = 0
                 # a response ends the routine
                 continueRoutine = False
+        
+        # *hint* updates
+        if hint.status == NOT_STARTED and tThisFlip >= 1.0-frameTolerance:
+            # keep track of start time/frame for later
+            hint.frameNStart = frameN  # exact frame index
+            hint.tStart = t  # local t and not account for scr refresh
+            hint.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(hint, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'hint.started')
+            hint.setAutoDraw(True)
+        if hint.status == STARTED:
+            # is it time to stop? (based on global clock, using actual start)
+            if tThisFlipGlobal > hint.tStartRefresh + 7.0-frameTolerance:
+                # keep track of stop time/frame for later
+                hint.tStop = t  # not accounting for scr refresh
+                hint.frameNStop = frameN  # exact frame index
+                # add timestamp to datafile
+                thisExp.timestampOnFlip(win, 'hint.stopped')
+                hint.setAutoDraw(False)
+        
+        # *Fixation* updates
+        if Fixation.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+            # keep track of start time/frame for later
+            Fixation.frameNStart = frameN  # exact frame index
+            Fixation.tStart = t  # local t and not account for scr refresh
+            Fixation.tStartRefresh = tThisFlipGlobal  # on global time
+            win.timeOnFlip(Fixation, 'tStartRefresh')  # time at next scr refresh
+            # add timestamp to datafile
+            thisExp.timestampOnFlip(win, 'Fixation.started')
+            Fixation.setAutoDraw(True)
+        if Fixation.status == STARTED:
+            # is it time to stop? (based on global clock, using actual start)
+            if tThisFlipGlobal > Fixation.tStartRefresh + 2-frameTolerance:
+                # keep track of stop time/frame for later
+                Fixation.tStop = t  # not accounting for scr refresh
+                Fixation.frameNStop = frameN  # exact frame index
+                # add timestamp to datafile
+                thisExp.timestampOnFlip(win, 'Fixation.stopped')
+                Fixation.setAutoDraw(False)
         
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):

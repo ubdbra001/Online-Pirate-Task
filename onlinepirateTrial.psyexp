@@ -70,7 +70,7 @@
         <Param val="player_score = 0&amp;#10;pirate_level = 0&amp;#10;level_limit = 460&amp;#10;leveled_up = False&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
         <Param val="player_score = 0;&amp;#10;pirate_level = 0;&amp;#10;level_limit = 460;&amp;#10;leveled_up = false;&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
         <Param val="trial_r_val = r_val[currentLoop.thisN];&amp;#10;trial_l_val = l_val[currentLoop.thisN];&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
-        <Param val="#Assuming you have a r_val and and l_val list:&amp;#10;&amp;#10;trial_r_val = r_val[ currentLoop.thisN ]&amp;#10;trial_l_val = l_val[ currentLoop.thisN ]&amp;#10;&amp;#10;# You'll also want to add some code here to tell the program which side is correct based on prob_bg" valType="extendedCode" updates="constant" name="Begin Routine"/>
+        <Param val="#Assuming you have a r_val and and l_val list:&amp;#10;&amp;#10;trial_r_val = r_val[ currentLoop.thisN ]&amp;#10;trial_l_val = l_val[ currentLoop.thisN ]&amp;#10;&amp;#10;# You'll also want to add some code here to tell the program which side is correct based on prob_bg&amp;#10;" valType="extendedCode" updates="constant" name="Begin Routine"/>
         <Param val="Auto-&gt;JS" valType="str" updates="None" name="Code Type"/>
         <Param val="" valType="extendedCode" updates="constant" name="Each Frame"/>
         <Param val="" valType="extendedCode" updates="constant" name="Each JS Frame"/>
@@ -176,6 +176,58 @@
         <Param val="True" valType="bool" updates="constant" name="storeCorrect"/>
         <Param val="True" valType="bool" updates="constant" name="syncScreenRefresh"/>
       </KeyboardComponent>
+      <ImageComponent name="hint">
+        <Param val="center" valType="str" updates="constant" name="anchor"/>
+        <Param val="$[1,1,1]" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="False" valType="bool" updates="constant" name="flipHoriz"/>
+        <Param val="False" valType="bool" updates="constant" name="flipVert"/>
+        <Param val="$imageVariable" valType="file" updates="set every repeat" name="image"/>
+        <Param val="linear" valType="str" updates="constant" name="interpolate"/>
+        <Param val="" valType="str" updates="constant" name="mask"/>
+        <Param val="hint" valType="code" updates="None" name="name"/>
+        <Param val="" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="(0.5, 0.5)" valType="list" updates="constant" name="size"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="1.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="7.0" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="128" valType="num" updates="constant" name="texture resolution"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+      </ImageComponent>
+      <TextComponent name="Fixation">
+        <Param val="Black" valType="color" updates="constant" name="color"/>
+        <Param val="rgb" valType="str" updates="constant" name="colorSpace"/>
+        <Param val="1" valType="num" updates="constant" name="contrast"/>
+        <Param val="False" valType="bool" updates="None" name="disabled"/>
+        <Param val="" valType="code" updates="None" name="durationEstim"/>
+        <Param val="None" valType="str" updates="constant" name="flip"/>
+        <Param val="Open Sans" valType="str" updates="constant" name="font"/>
+        <Param val="LTR" valType="str" updates="None" name="languageStyle"/>
+        <Param val="0.05" valType="num" updates="constant" name="letterHeight"/>
+        <Param val="Fixation" valType="code" updates="None" name="name"/>
+        <Param val="1" valType="num" updates="constant" name="opacity"/>
+        <Param val="0" valType="num" updates="constant" name="ori"/>
+        <Param val="(0, 0)" valType="list" updates="constant" name="pos"/>
+        <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
+        <Param val="" valType="code" updates="None" name="startEstim"/>
+        <Param val="time (s)" valType="str" updates="None" name="startType"/>
+        <Param val="0.0" valType="code" updates="None" name="startVal"/>
+        <Param val="duration (s)" valType="str" updates="None" name="stopType"/>
+        <Param val="2" valType="code" updates="constant" name="stopVal"/>
+        <Param val="True" valType="bool" updates="None" name="syncScreenRefresh"/>
+        <Param val="+" valType="str" updates="constant" name="text"/>
+        <Param val="from exp settings" valType="str" updates="None" name="units"/>
+        <Param val="" valType="num" updates="constant" name="wrapWidth"/>
+      </TextComponent>
     </Routine>
     <Routine name="feedback">
       <ImageComponent name="image">
@@ -210,8 +262,8 @@
       <CodeComponent name="setup_code">
         <Param val="" valType="extendedCode" updates="constant" name="Before Experiment"/>
         <Param val="" valType="extendedCode" updates="constant" name="Before JS Experiment"/>
-        <Param val="# Code in here is run at the very beginning of the experiment&amp;#10;&amp;#10;imagePath = &quot;stimuli/&quot; # This establishes where the stimuli are stored&amp;#10;imageVariable = None # Need this to initialise the feedback image display&amp;#10;&amp;#10;num_trial = 120 # Number of trials in the experiment&amp;#10;zero = [0] #create lists &amp;#10;one = [1]&amp;#10;&amp;#10;trial_list_s = zero*45+one*15 # Blue 75% Green 25%&amp;#10;trial_list_vi = zero*16+one*4 # Blue 80% Green 20%&amp;#10;trial_list_vii = zero*4+one*16 # Blue 20% Green 80%&amp;#10;&amp;#10;from numpy import random as rand #randomise lists&amp;#10;rand.shuffle(trial_list_s)&amp;#10;rand.shuffle(trial_list_vi)&amp;#10;rand.shuffle(trial_list_vii)&amp;#10;&amp;#10;&amp;#10;#overall task probability&amp;#10;prob_bg = trial_list_s + trial_list_vi + trial_list_vii + trial_list_vi&amp;#10;&amp;#10;num_trial = len(prob_bg)&amp;#10;&amp;#10;r_val = []&amp;#10;l_val = []&amp;#10;&amp;#10;#create reward values&amp;#10;for t in range(0,num_trial):&amp;#10;    val = rand.randint(1,100)&amp;#10;    r_val.append(val)&amp;#10;    l_val.append(100-val)&amp;#10;&amp;#10;" valType="extendedCode" updates="constant" name="Begin Experiment"/>
-        <Param val="var imagePath, imageVariable, l_val, num_trial, one, prob_bg, r_val, trial_list_s, trial_list_vi, trial_list_vii, val, zero;&amp;#10;imagePath = &quot;stimuli/&quot;;&amp;#10;imageVariable = null;&amp;#10;num_trial = 120;&amp;#10;zero = [0];&amp;#10;one = [1];&amp;#10;trial_list_s = ((zero * 45) + (one * 15));&amp;#10;trial_list_vi = ((zero * 16) + (one * 4));&amp;#10;trial_list_vii = ((zero * 4) + (one * 16));&amp;#10;util.shuffle(trial_list_s);&amp;#10;util.shuffle(trial_list_vi);&amp;#10;util.shuffle(trial_list_vii);&amp;#10;prob_bg = (((trial_list_s + trial_list_vi) + trial_list_vii) + trial_list_vi);&amp;#10;num_trial = prob_bg.length;&amp;#10;r_val = [];&amp;#10;l_val = [];&amp;#10;for (var t = 0, _pj_a = num_trial; (t &lt; _pj_a); t += 1) {&amp;#10;    val = util.randint(1, 100);&amp;#10;    l_val = l_val.concat((100 - val));&amp;#10;    r_val = r_val.concat(val);&amp;#10;}&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
+        <Param val="# Code in here is run at the very beginning of the experiment&amp;#10;&amp;#10;imagePath = &quot;stimuli/&quot; # This establishes where the stimuli are stored&amp;#10;imageVariable = None # Need this to initialise the feedback image display&amp;#10;&amp;#10;num_trial = 120 # Number of trials in the experiment&amp;#10;zero = [0] #create lists &amp;#10;one = [1]&amp;#10;&amp;#10;#lists for blue/green probability&amp;#10;trial_list_s = zero*45+one*15 # Blue 75% Green 25%&amp;#10;trial_list_vi = zero*16+one*4 # Blue 80% Green 20%&amp;#10;trial_list_vii = zero*4+one*16 # Blue 20% Green 80%&amp;#10;&amp;#10;#lists for hint probability&amp;#10;trial_list_w = zero*23+one*7 # Hint correct 75%&amp;#10;trial_list_x = zero*2+one*8 # Hint correct 20%&amp;#10;trial_list_y = zero*8+one*2 # Hint correct 80%&amp;#10;trial_list_z = zero*8+one*42 # Hint correct 15%&amp;#10;&amp;#10;from numpy import random as rand #randomise lists&amp;#10;rand.shuffle(trial_list_s)&amp;#10;rand.shuffle(trial_list_vi)&amp;#10;rand.shuffle(trial_list_vii)&amp;#10;rand.shuffle(trial_list_w)&amp;#10;rand.shuffle(trial_list_x)&amp;#10;rand.shuffle(trial_list_y)&amp;#10;rand.shuffle(trial_list_z)&amp;#10;&amp;#10;#overall task probability&amp;#10;prob_bg = trial_list_s + trial_list_vi + trial_list_vii + trial_list_vi&amp;#10;&amp;#10;# overall hint probability&amp;#10;prob_hint = trial_list_w + trial_list_x + trial_list_y + trial_list_x + trial_list_y + trial_list_z&amp;#10;&amp;#10;num_trial = len(prob_bg)&amp;#10;&amp;#10;r_val = []&amp;#10;l_val = []&amp;#10;&amp;#10;#create reward values&amp;#10;for t in range(0,num_trial):&amp;#10;    val = rand.randint(1,100)&amp;#10;    r_val.append(val)&amp;#10;    l_val.append(100-val)&amp;#10;&amp;#10;#create hint probability&amp;#10;# Generate uniformly distributed random number between 0 and 1&amp;#10;## hint_prob = rand.uniform(size = 1)&amp;#10;&amp;#10;&amp;#10;# Generate start times for hint and response window&amp;#10;hint_start = rand.uniform(3, 7)&amp;#10;resp_start = hint_start + rand.uniform(3, 7)&amp;#10;&amp;#10;# Set up selection positions&amp;#10;left_pos = (-0.52, -0.32)&amp;#10;right_pos = (0.52, -0.32)" valType="extendedCode" updates="constant" name="Begin Experiment"/>
+        <Param val="var imagePath, imageVariable, l_val, num_trial, one, prob_bg, r_val, trial_list_s, trial_list_vi, trial_list_vii, val, zero;&amp;#10;imagePath = &quot;stimuli/&quot;;&amp;#10;imageVariable = null;&amp;#10;num_trial = 120;&amp;#10;zero = [0];&amp;#10;one = [1];&amp;#10;trial_list_s = ((zero * 45) + (one * 15));&amp;#10;trial_list_vi = ((zero * 16) + (one * 4));&amp;#10;trial_list_vii = ((zero * 4) + (one * 16));&amp;#10;trial_list_w = ((zero * 23) + (one * 7));&amp;#10;trial_list_x = ((zero * 2) + (one * 8));&amp;#10;trial_list_y = ((zero * 8) + (one * 2));&amp;#10;trial_list_z = ((zero * 8) + (one * 42));&amp;#10;util.shuffle(trial_list_s);&amp;#10;util.shuffle(trial_list_vi);&amp;#10;util.shuffle(trial_list_vii);&amp;#10;util.shuffle(trial_list_w);&amp;#10;util.shuffle(trial_list_x);&amp;#10;util.shuffle(trial_list_y);&amp;#10;util.shuffle(trial_list_z);&amp;#10;prob_bg = (((trial_list_s + trial_list_vi) + trial_list_vii) + trial_list_vi);&amp;#10;num_trial = prob_bg.length;&amp;#10;r_val = [];&amp;#10;l_val = [];&amp;#10;for (var t = 0, _pj_a = num_trial; (t &lt; _pj_a); t += 1) {&amp;#10;    val = util.randint(1, 100);&amp;#10;    l_val = l_val.concat((100 - val));&amp;#10;    r_val = r_val.concat(val);&amp;#10;}&amp;#10;" valType="extendedCode" updates="constant" name="Begin JS Experiment"/>
         <Param val="" valType="extendedCode" updates="constant" name="Begin JS Routine"/>
         <Param val="" valType="extendedCode" updates="constant" name="Begin Routine"/>
         <Param val="Both" valType="str" updates="None" name="Code Type"/>
